@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USER}
+    password: ${DATABASE_PASSWORD}
+    hikari:
+      connection-timeout: 5000
+      maximum-pool-size: 5
+      minimum-idle: 2
+      # Mantém conexão viva com Neon (auto-pausa após 5 min de inatividade)
+      keepalive-time: 60000
+      connection-init-sql: "SELECT 1"
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+logging:
+  level:
+    org.hibernate.SQL: WARN
+    br.com.carde: INFO
+
+carde:
+  cdn:
+    base-url: ${CDN_BASE_URL}
