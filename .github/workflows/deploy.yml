@@ -46,7 +46,7 @@ jobs:
           SPRING_DATASOURCE_USERNAME: carde
           SPRING_DATASOURCE_PASSWORD: carde123
           SPRING_PROFILES_ACTIVE: test
-        run: mvn test -B
+        run: mvn test -B -e
 
   # ───────────────────────────────────────────────────────────
   # JOB 2: Build da imagem Docker e push para GHCR
