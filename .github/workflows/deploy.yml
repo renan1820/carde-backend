@@ -120,6 +120,7 @@ jobs:
           KOYEB_TOKEN: ${{ secrets.KOYEB_API_TOKEN }}
         run: |
           koyeb services update carde-api/carde-api \
+            --token "$KOYEB_TOKEN" \
             --docker "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:develop" \
             --env "DATABASE_URL=${{ secrets.DATABASE_URL_STAGING }}" \
             --env "DATABASE_USER=${{ secrets.DATABASE_USER_STAGING }}" \
@@ -147,6 +148,7 @@ jobs:
           KOYEB_TOKEN: ${{ secrets.KOYEB_API_TOKEN }}
         run: |
           koyeb services update carde-api/carde-api \
+            --token "$KOYEB_TOKEN" \
             --docker "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:main" \
             --env "DATABASE_URL=${{ secrets.DATABASE_URL_PROD }}" \
             --env "DATABASE_USER=${{ secrets.DATABASE_USER_PROD }}" \
