@@ -45,8 +45,7 @@ jobs:
           SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/carde_test
           SPRING_DATASOURCE_USERNAME: carde
           SPRING_DATASOURCE_PASSWORD: carde123
-          SPRING_PROFILES_ACTIVE: dev
-          CDN_BASE_URL: http://localhost
+          SPRING_PROFILES_ACTIVE: test
         run: mvn test -B
 
   # ───────────────────────────────────────────────────────────

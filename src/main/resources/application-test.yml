@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    # Valores padrão para rodar localmente (docker compose up -d)
+    # Em CI, sobrescritos pelas env vars do GitHub Actions
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/carde_dev}
+    username: ${SPRING_DATASOURCE_USERNAME:carde}
+    password: ${SPRING_DATASOURCE_PASSWORD:carde123}
+    hikari:
+      connection-timeout: 5000
+      maximum-pool-size: 3
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+  flyway:
+    enabled: true
+
+carde:
+  cdn:
+    base-url: http://localhost:8080
+
+logging:
+  level:
+    br.com.carde: INFO
+    org.hibernate.SQL: WARN
