@@ -119,7 +119,7 @@ jobs:
         env:
           KOYEB_TOKEN: ${{ secrets.KOYEB_API_TOKEN }}
         run: |
-          koyeb services update carde-api/carde-api \
+          koyeb services update separate-carlita/carde-api \
             --token "$KOYEB_TOKEN" \
             --docker "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:develop" \
             --env "DATABASE_URL=${{ secrets.DATABASE_URL_STAGING }}" \
@@ -147,7 +147,7 @@ jobs:
         env:
           KOYEB_TOKEN: ${{ secrets.KOYEB_API_TOKEN }}
         run: |
-          koyeb services update carde-api/carde-api \
+          koyeb services update separate-carlita/carde-api \
             --token "$KOYEB_TOKEN" \
             --docker "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:main" \
             --env "DATABASE_URL=${{ secrets.DATABASE_URL_PROD }}" \
