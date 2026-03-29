@@ -19,6 +19,9 @@ carde:
   cdn:
     base-url: http://localhost:8080
 
+jwt:
+  secret: ${JWT_SECRET:test-secret-key-min-32-chars-long-for-ci-tests}
+
 logging:
   level:
     br.com.carde: INFO

@@ -11,4 +11,7 @@ public interface VehicleRepository {
     Page<Vehicle> findAll(Pageable pageable);
     Page<Vehicle> findByCategory(VehicleCategory category, Pageable pageable);
     Optional<Vehicle> findById(String id);
+    Vehicle save(Vehicle vehicle);
+    void deleteById(String id);
+    boolean existsById(String id);
 }

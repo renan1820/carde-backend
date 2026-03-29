@@ -33,7 +33,35 @@ public class VehicleRepositoryAdapter implements VehicleRepository {
 
     @Override
     public Optional<Vehicle> findById(String id) {
-        return jpaRepository.findByIdAndActiveTrue(id)
+        return jpaRepository.findById(id)
                 .map(mapper::toDomain);
+    }
+
+    @Override
+    public Vehicle save(Vehicle vehicle) {
+        return jpaRepository.findById(vehicle.id()).map(existing -> {
+            // Update: merge into managed entity so orphanRemoval cleans up specs
+            existing.setName(vehicle.name());
+            existing.setBrand(vehicle.brand());
+            existing.setYear(vehicle.year());
+            existing.setCategory(vehicle.category());
+            existing.setShortDescription(vehicle.shortDescription());
+            existing.setFullHistory(vehicle.fullHistory());
+            existing.setImageUrl(vehicle.imageUrl());
+            existing.setEngineSoundUrl(vehicle.engineSoundUrl());
+            existing.getSpecs().clear();
+            mapper.addSpecs(existing, vehicle.specs());
+            return mapper.toDomain(jpaRepository.save(existing));
+        }).orElseGet(() -> mapper.toDomain(jpaRepository.save(mapper.toEntity(vehicle))));
+    }
+
+    @Override
+    public void deleteById(String id) {
+        jpaRepository.deleteById(id);
+    }
+
+    @Override
+    public boolean existsById(String id) {
+        return jpaRepository.existsById(id);
     }
 }

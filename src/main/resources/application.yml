@@ -35,3 +35,6 @@ springdoc:
 carde:
   cdn:
     base-url: ${CDN_BASE_URL:http://localhost:8080}
+
+jwt:
+  secret: ${JWT_SECRET:dev-secret-key-min-32-chars-long-for-local-only}
