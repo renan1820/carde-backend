@@ -31,7 +31,7 @@ public class CreateVehicleUseCase {
                 request.category(),
                 request.shortDescription(),
                 request.fullHistory(),
-                request.imageUrl(),
+                request.imageUrls(),
                 request.engineSoundUrl(),
                 specs
         );

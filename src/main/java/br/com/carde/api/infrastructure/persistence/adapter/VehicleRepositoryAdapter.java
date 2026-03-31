@@ -47,7 +47,10 @@ public class VehicleRepositoryAdapter implements VehicleRepository {
             existing.setCategory(vehicle.category());
             existing.setShortDescription(vehicle.shortDescription());
             existing.setFullHistory(vehicle.fullHistory());
-            existing.setImageUrl(vehicle.imageUrl());
+            existing.getImageUrls().clear();
+            if (vehicle.imageUrls() != null) {
+                existing.getImageUrls().addAll(vehicle.imageUrls());
+            }
             existing.setEngineSoundUrl(vehicle.engineSoundUrl());
             existing.getSpecs().clear();
             mapper.addSpecs(existing, vehicle.specs());

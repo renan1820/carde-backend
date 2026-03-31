@@ -12,7 +12,7 @@ public record VehicleRequest(
         @NotNull VehicleCategory category,
         @NotBlank @Size(max = 500) String shortDescription,
         @NotBlank String fullHistory,
-        @NotBlank @Size(max = 1000) String imageUrl,
+        @NotEmpty @Size(max = 10) List<@NotBlank @Size(max = 1000) String> imageUrls,
         @Size(max = 1000) String engineSoundUrl,
         List<SpecRequest> specs
 ) {

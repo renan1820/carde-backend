@@ -19,6 +19,9 @@ public class VehicleEntityMapper {
         if (entity.getSpecs() != null) {
             entity.getSpecs().forEach(s -> specs.put(s.getSpecKey(), s.getSpecValue()));
         }
+        List<String> imageUrls = entity.getImageUrls() != null
+                ? new ArrayList<>(entity.getImageUrls())
+                : new ArrayList<>();
         return new Vehicle(
                 entity.getId(),
                 entity.getName(),
@@ -27,7 +30,7 @@ public class VehicleEntityMapper {
                 entity.getCategory(),
                 entity.getShortDescription(),
                 entity.getFullHistory(),
-                entity.getImageUrl(),
+                imageUrls,
                 entity.getEngineSoundUrl(),
                 specs
         );
@@ -42,7 +45,9 @@ public class VehicleEntityMapper {
         entity.setCategory(vehicle.category());
         entity.setShortDescription(vehicle.shortDescription());
         entity.setFullHistory(vehicle.fullHistory());
-        entity.setImageUrl(vehicle.imageUrl());
+        if (vehicle.imageUrls() != null) {
+            entity.getImageUrls().addAll(vehicle.imageUrls());
+        }
         entity.setEngineSoundUrl(vehicle.engineSoundUrl());
         entity.setActive(true);
         addSpecs(entity, vehicle.specs());
