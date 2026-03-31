@@ -4,6 +4,7 @@ import br.com.carde.api.domain.model.Vehicle;
 import br.com.carde.api.domain.repository.VehicleRepository;
 import br.com.carde.api.presentation.dto.request.VehicleRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +18,7 @@ public class CreateVehicleUseCase {
 
     private final VehicleRepository repository;
 
+    @CacheEvict(cacheNames = "vehicles", allEntries = true)
     @Transactional
     public Vehicle execute(VehicleRequest request) {
         String id = UUID.randomUUID().toString();

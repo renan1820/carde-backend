@@ -5,6 +5,7 @@ import br.com.carde.api.domain.repository.EventRepository;
 import br.com.carde.api.exception.ResourceNotFoundException;
 import br.com.carde.api.presentation.dto.request.EventRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +15,7 @@ public class UpdateEventUseCase {
 
     private final EventRepository repository;
 
+    @CacheEvict(cacheNames = "events", allEntries = true)
     @Transactional
     public MuseumEvent execute(String id, EventRequest request) {
         if (!repository.existsById(id)) {

@@ -4,6 +4,7 @@ import br.com.carde.api.domain.model.Vehicle;
 import br.com.carde.api.domain.repository.VehicleRepository;
 import br.com.carde.api.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,6 +14,7 @@ public class GetVehicleByIdUseCase {
 
     private final VehicleRepository repository;
 
+    @Cacheable(cacheNames = "vehicle-by-id", key = "#id")
     @Transactional(readOnly = true)
     public Vehicle execute(String id) {
         return repository.findById(id)
