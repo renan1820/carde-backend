@@ -64,6 +64,7 @@ public class SecurityConfig {
         adminConfig.setAllowedOrigins(List.of(
                 "https://carde.com.br",
                 "https://admin.carde.com.br",
+                "https://carde-admin.vercel.app",
                 "http://localhost:5173"  // dev local do frontend React
         ));
         adminConfig.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
