@@ -61,11 +61,11 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         // Configuração para rotas admin — permite métodos de escrita e header Authorization
         CorsConfiguration adminConfig = new CorsConfiguration();
-        adminConfig.setAllowedOrigins(List.of(
+        adminConfig.setAllowedOriginPatterns(List.of(
                 "https://carde.com.br",
                 "https://admin.carde.com.br",
-                "https://carde-admin.vercel.app",
-                "http://localhost:5173"  // dev local do frontend React
+                "https://carde-admin*.vercel.app",  // cobre produção e previews
+                "http://localhost:5173"
         ));
         adminConfig.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         adminConfig.setAllowedHeaders(List.of("Content-Type", "Accept", "Accept-Language", "Authorization"));
