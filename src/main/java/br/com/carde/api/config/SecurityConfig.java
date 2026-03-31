@@ -1,6 +1,5 @@
 package br.com.carde.api.config;
 
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -23,11 +22,11 @@ import java.util.List;
 public class SecurityConfig {
 
     private final RateLimitFilter rateLimitFilter;
-    private final JwtAuthFilter jwtAuthFilter;
+    private final JwtService jwtService;
 
-    public SecurityConfig(RateLimitFilter rateLimitFilter, JwtAuthFilter jwtAuthFilter) {
+    public SecurityConfig(RateLimitFilter rateLimitFilter, JwtService jwtService) {
         this.rateLimitFilter = rateLimitFilter;
-        this.jwtAuthFilter = jwtAuthFilter;
+        this.jwtService = jwtService;
     }
 
     @Bean
@@ -37,6 +36,11 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        // JwtAuthFilter is instantiated here (not a Spring bean) so Spring Boot
+        // never auto-registers it as a standalone servlet filter.
+        // It runs exclusively inside the Spring Security filter chain.
+        JwtAuthFilter jwtAuthFilter = new JwtAuthFilter(jwtService);
+
         http
             .csrf(AbstractHttpConfigurer::disable)
             .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -56,13 +60,6 @@ public class SecurityConfig {
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
-    }
-
-    @Bean
-    public FilterRegistrationBean<JwtAuthFilter> jwtFilterRegistration(JwtAuthFilter filter) {
-        FilterRegistrationBean<JwtAuthFilter> registration = new FilterRegistrationBean<>(filter);
-        registration.setEnabled(false);
-        return registration;
     }
 
     @Bean
