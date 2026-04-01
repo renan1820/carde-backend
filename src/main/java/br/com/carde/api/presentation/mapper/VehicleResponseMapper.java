@@ -7,6 +7,9 @@ import br.com.carde.api.presentation.dto.response.VehicleResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.Objects;
+
 @Component
 @RequiredArgsConstructor
 public class VehicleResponseMapper {
@@ -21,12 +24,17 @@ public class VehicleResponseMapper {
                 vehicle.year(),
                 vehicle.category().name(),
                 vehicle.shortDescription(),
-                appConfig.cdn().resolve(vehicle.imageUrl()),
+                appConfig.cdn().resolve(vehicle.primaryImageUrl()),
                 vehicle.hasEngineSound()
         );
     }
 
     public VehicleResponse toDetail(Vehicle vehicle) {
+        List<String> resolvedUrls = vehicle.imageUrls() == null ? List.of() :
+                vehicle.imageUrls().stream()
+                        .map(url -> appConfig.cdn().resolve(url))
+                        .filter(Objects::nonNull)
+                        .toList();
         return new VehicleResponse(
                 vehicle.id(),
                 vehicle.name(),
@@ -35,7 +43,7 @@ public class VehicleResponseMapper {
                 vehicle.category().name(),
                 vehicle.shortDescription(),
                 vehicle.fullHistory(),
-                appConfig.cdn().resolve(vehicle.imageUrl()),
+                resolvedUrls,
                 appConfig.cdn().resolve(vehicle.engineSoundUrl()),
                 vehicle.specs()
         );

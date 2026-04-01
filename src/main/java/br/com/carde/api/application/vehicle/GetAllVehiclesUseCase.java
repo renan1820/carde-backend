@@ -4,6 +4,7 @@ import br.com.carde.api.domain.model.Vehicle;
 import br.com.carde.api.domain.model.VehicleCategory;
 import br.com.carde.api.domain.repository.VehicleRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,8 @@ public class GetAllVehiclesUseCase {
 
     private final VehicleRepository repository;
 
+    @Cacheable(cacheNames = "vehicles",
+               key = "T(java.util.Objects).hash(#category?.toString(), #pageable.pageNumber, #pageable.pageSize)")
     @Transactional(readOnly = true)
     public Page<Vehicle> execute(VehicleCategory category, Pageable pageable) {
         if (category != null) {

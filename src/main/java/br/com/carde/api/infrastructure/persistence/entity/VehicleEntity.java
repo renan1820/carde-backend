@@ -39,8 +39,12 @@ public class VehicleEntity {
     @Column(name = "full_history", nullable = false, columnDefinition = "TEXT")
     private String fullHistory;
 
-    @Column(name = "image_url", nullable = false, length = 1000)
-    private String imageUrl;
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "vehicle_images",
+            joinColumns = @JoinColumn(name = "vehicle_id"))
+    @Column(name = "url", length = 1000)
+    @OrderColumn(name = "sort_order")
+    private List<String> imageUrls = new ArrayList<>();
 
     @Column(name = "engine_sound_url", length = 1000)
     private String engineSoundUrl;

@@ -1,4 +1,6 @@
 spring:
+  cache:
+    type: none
   datasource:
     # Valores padrão para rodar localmente (docker compose up -d)
     # Em CI, sobrescritos pelas env vars do GitHub Actions
@@ -18,6 +20,9 @@ spring:
 carde:
   cdn:
     base-url: http://localhost:8080
+
+jwt:
+  secret: ${JWT_SECRET:test-secret-key-min-32-chars-long-for-ci-tests}
 
 logging:
   level:

@@ -8,7 +8,9 @@ spring:
       maximum-pool-size: 5
       minimum-idle: 2
       # Mantém conexão viva com Neon (auto-pausa após 5 min de inatividade)
-      keepalive-time: 60000
+      # 4 min — deixa o Neon entrar em auto-pause nos períodos sem tráfego
+      # (auto-pause acontece após 5 min de inatividade no free tier)
+      keepalive-time: 240000
       connection-init-sql: "SELECT 1"
   jpa:
     properties:

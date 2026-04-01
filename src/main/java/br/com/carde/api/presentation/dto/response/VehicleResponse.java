@@ -1,5 +1,6 @@
 package br.com.carde.api.presentation.dto.response;
 
+import java.util.List;
 import java.util.Map;
 
 public record VehicleResponse(
@@ -10,7 +11,7 @@ public record VehicleResponse(
         String category,
         String shortDescription,
         String fullHistory,
-        String imageUrl,
+        List<String> imageUrls,
         String engineSoundUrl,
         Map<String, String> specs
 ) {}

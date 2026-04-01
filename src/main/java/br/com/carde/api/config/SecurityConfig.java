@@ -2,11 +2,13 @@ package br.com.carde.api.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -20,18 +22,32 @@ import java.util.List;
 public class SecurityConfig {
 
     private final RateLimitFilter rateLimitFilter;
+    private final JwtService jwtService;
 
-    public SecurityConfig(RateLimitFilter rateLimitFilter) {
+    public SecurityConfig(RateLimitFilter rateLimitFilter, JwtService jwtService) {
         this.rateLimitFilter = rateLimitFilter;
+        this.jwtService = jwtService;
+    }
+
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(12);
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        // JwtAuthFilter is instantiated here (not a Spring bean) so Spring Boot
+        // never auto-registers it as a standalone servlet filter.
+        // It runs exclusively inside the Spring Security filter chain.
+        JwtAuthFilter jwtAuthFilter = new JwtAuthFilter(jwtService);
+
         http
             .csrf(AbstractHttpConfigurer::disable)
             .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .authorizeHttpRequests(auth -> auth
+                .requestMatchers(HttpMethod.POST, "/api/v1/admin/auth/login").permitAll()
+                .requestMatchers("/api/v1/admin/**").authenticated()
                 .requestMatchers("/api/v1/**").permitAll()
                 .anyRequest().denyAll())
             .headers(headers -> headers
@@ -40,25 +56,39 @@ public class SecurityConfig {
                     .maxAgeInSeconds(31_536_000))
                 .contentTypeOptions(Customizer.withDefaults())
                 .frameOptions(frame -> frame.deny()))
-            .addFilterBefore(rateLimitFilter, UsernamePasswordAuthenticationFilter.class);
+            .addFilterBefore(rateLimitFilter, UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration config = new CorsConfiguration();
-        // Flutter mobile não envia CORS preflight — config para futura admin web
-        config.setAllowedOrigins(List.of(
+        // Configuração para rotas admin — permite métodos de escrita e header Authorization
+        CorsConfiguration adminConfig = new CorsConfiguration();
+        adminConfig.setAllowedOriginPatterns(List.of(
+                "https://carde.com.br",
+                "https://admin.carde.com.br",
+                "https://carde-admin*.vercel.app",  // cobre produção e previews
+                "http://localhost:5173"
+        ));
+        adminConfig.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        adminConfig.setAllowedHeaders(List.of("Content-Type", "Accept", "Accept-Language", "Authorization"));
+        adminConfig.setMaxAge(3600L);
+
+        // Configuração para rotas públicas — apenas leitura
+        CorsConfiguration publicConfig = new CorsConfiguration();
+        publicConfig.setAllowedOrigins(List.of(
                 "https://carde.com.br",
                 "https://admin.carde.com.br"
         ));
-        config.setAllowedMethods(List.of("GET", "OPTIONS"));
-        config.setAllowedHeaders(List.of("Content-Type", "Accept", "Accept-Language"));
-        config.setMaxAge(3600L);
+        publicConfig.setAllowedMethods(List.of("GET", "OPTIONS"));
+        publicConfig.setAllowedHeaders(List.of("Content-Type", "Accept", "Accept-Language"));
+        publicConfig.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/api/**", config);
+        source.registerCorsConfiguration("/api/v1/admin/**", adminConfig);
+        source.registerCorsConfiguration("/api/**", publicConfig);
         return source;
     }
 }

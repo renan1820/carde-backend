@@ -1,6 +1,14 @@
 spring:
   application:
     name: carde-api
+  cache:
+    type: caffeine
+    caffeine:
+      spec: maximumSize=500,expireAfterWrite=30m
+    cache-names:
+      - vehicles
+      - vehicle-by-id
+      - events
   jpa:
     open-in-view: false
     hibernate:
@@ -8,7 +16,6 @@ spring:
   flyway:
     enabled: true
     locations: classpath:db/migration
-    baseline-on-migrate: true
 
 server:
   port: 8080
@@ -36,3 +43,6 @@ springdoc:
 carde:
   cdn:
     base-url: ${CDN_BASE_URL:http://localhost:8080}
+
+jwt:
+  secret: ${JWT_SECRET:dev-secret-key-min-32-chars-long-for-local-only}

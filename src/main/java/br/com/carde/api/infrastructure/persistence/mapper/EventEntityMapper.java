@@ -17,4 +17,16 @@ public class EventEntityMapper {
                 entity.isFeatured()
         );
     }
+
+    public EventEntity toEntity(MuseumEvent event) {
+        EventEntity entity = new EventEntity();
+        entity.setId(event.id());
+        entity.setTitle(event.title());
+        entity.setDescription(event.description());
+        entity.setEventDate(event.date());
+        entity.setImageUrl(event.imageUrl());
+        entity.setFeatured(event.featured());
+        entity.setActive(true);
+        return entity;
+    }
 }

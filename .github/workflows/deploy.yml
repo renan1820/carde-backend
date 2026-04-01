@@ -46,7 +46,17 @@ jobs:
           SPRING_DATASOURCE_USERNAME: carde
           SPRING_DATASOURCE_PASSWORD: carde123
           SPRING_PROFILES_ACTIVE: test
-        run: mvn test -B
+          JWT_SECRET: ci-test-secret-key-min-32-chars-placeholder
+          ADMIN_PASSWORD: AdminCI@test99
+        run: mvn test -B -e
+
+      - name: Upload relatórios de teste (em caso de falha)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: surefire-reports
+          path: target/surefire-reports/
+          retention-days: 7
 
   # ───────────────────────────────────────────────────────────
   # JOB 2: Build da imagem Docker e push para GHCR
@@ -111,12 +121,15 @@ jobs:
         env:
           KOYEB_TOKEN: ${{ secrets.KOYEB_API_TOKEN }}
         run: |
-          koyeb services update carde-api/carde-api \
+          koyeb services update separate-carlita/carde-api \
+            --token "$KOYEB_TOKEN" \
             --docker "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:develop" \
             --env "DATABASE_URL=${{ secrets.DATABASE_URL_STAGING }}" \
             --env "DATABASE_USER=${{ secrets.DATABASE_USER_STAGING }}" \
             --env "DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD_STAGING }}" \
             --env "CDN_BASE_URL=${{ secrets.CDN_BASE_URL }}" \
+            --env "JWT_SECRET=${{ secrets.JWT_SECRET }}" \
+            --env "ADMIN_PASSWORD=${{ secrets.ADMIN_PASSWORD }}" \
             --env "SPRING_PROFILES_ACTIVE=prod"
 
   # ───────────────────────────────────────────────────────────
@@ -138,10 +151,13 @@ jobs:
         env:
           KOYEB_TOKEN: ${{ secrets.KOYEB_API_TOKEN }}
         run: |
-          koyeb services update carde-api/carde-api \
+          koyeb services update separate-carlita/carde-api \
+            --token "$KOYEB_TOKEN" \
             --docker "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:main" \
             --env "DATABASE_URL=${{ secrets.DATABASE_URL_PROD }}" \
             --env "DATABASE_USER=${{ secrets.DATABASE_USER_PROD }}" \
             --env "DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD_PROD }}" \
             --env "CDN_BASE_URL=${{ secrets.CDN_BASE_URL }}" \
+            --env "JWT_SECRET=${{ secrets.JWT_SECRET }}" \
+            --env "ADMIN_PASSWORD=${{ secrets.ADMIN_PASSWORD }}" \
             --env "SPRING_PROFILES_ACTIVE=prod"
