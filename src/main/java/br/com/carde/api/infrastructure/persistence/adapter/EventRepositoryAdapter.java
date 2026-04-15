@@ -43,6 +43,7 @@ public class EventRepositoryAdapter implements EventRepository {
             existing.setEventDate(event.date());
             existing.setImageUrl(event.imageUrl());
             existing.setFeatured(event.featured());
+            existing.setExternalLink(event.externalLink());
             return mapper.toDomain(jpaRepository.save(existing));
         }).orElseGet(() -> mapper.toDomain(jpaRepository.save(mapper.toEntity(event))));
     }

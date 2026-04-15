@@ -19,7 +19,8 @@ public class EventResponseMapper {
                 event.description(),
                 event.date(),
                 appConfig.cdn().resolve(event.imageUrl()),
-                event.featured()
+                event.featured(),
+                event.externalLink()
         );
     }
 }

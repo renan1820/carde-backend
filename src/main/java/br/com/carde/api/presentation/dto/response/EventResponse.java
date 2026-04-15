@@ -8,5 +8,6 @@ public record EventResponse(
         String description,
         OffsetDateTime date,
         String imageUrl,
-        boolean isFeatured
+        boolean isFeatured,
+        String externalLink
 ) {}

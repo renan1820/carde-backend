@@ -32,6 +32,9 @@ public class EventEntity {
     @Column(name = "is_featured", nullable = false)
     private boolean featured;
 
+    @Column(name = "external_link", length = 1000)
+    private String externalLink;
+
     @Column(name = "is_active", nullable = false)
     private boolean active = true;
 

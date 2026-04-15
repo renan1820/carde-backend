@@ -11,5 +11,6 @@ public record EventRequest(
         @NotBlank String description,
         @NotNull OffsetDateTime date,
         @NotBlank @Size(max = 1000) String imageUrl,
-        boolean featured
+        boolean featured,
+        @Size(max = 1000) String externalLink
 ) {}

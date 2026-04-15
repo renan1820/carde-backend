@@ -27,7 +27,8 @@ public class UpdateEventUseCase {
                 request.description(),
                 request.date(),
                 request.imageUrl(),
-                request.featured()
+                request.featured(),
+                request.externalLink()
         );
         return repository.save(updated);
     }

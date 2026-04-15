@@ -8,5 +8,6 @@ public record MuseumEvent(
         String description,
         OffsetDateTime date,
         String imageUrl,
-        boolean featured
+        boolean featured,
+        String externalLink
 ) {}
