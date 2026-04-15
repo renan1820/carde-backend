@@ -2,6 +2,7 @@ package br.com.carde.api.presentation.mapper;
 
 import br.com.carde.api.config.AppConfig;
 import br.com.carde.api.domain.model.Vehicle;
+import br.com.carde.api.domain.repository.VehicleQrCodeRepository;
 import br.com.carde.api.presentation.dto.response.VehicleListItemResponse;
 import br.com.carde.api.presentation.dto.response.VehicleResponse;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import java.util.Objects;
 public class VehicleResponseMapper {
 
     private final AppConfig appConfig;
+    private final VehicleQrCodeRepository qrCodeRepository;
 
     public VehicleListItemResponse toListItem(Vehicle vehicle) {
         return new VehicleListItemResponse(
@@ -35,6 +37,9 @@ public class VehicleResponseMapper {
                         .map(url -> appConfig.cdn().resolve(url))
                         .filter(Objects::nonNull)
                         .toList();
+        String qrCodeImageUrl = qrCodeRepository.findByVehicleId(vehicle.id())
+                .map(qr -> qr.imageUrl())
+                .orElse(null);
         return new VehicleResponse(
                 vehicle.id(),
                 vehicle.name(),
@@ -45,7 +50,8 @@ public class VehicleResponseMapper {
                 vehicle.fullHistory(),
                 resolvedUrls,
                 appConfig.cdn().resolve(vehicle.engineSoundUrl()),
-                vehicle.specs()
+                vehicle.specs(),
+                qrCodeImageUrl
         );
     }
 }

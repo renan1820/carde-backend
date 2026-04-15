@@ -2,7 +2,9 @@ package br.com.carde.api.presentation.controller;
 
 import br.com.carde.api.application.vehicle.*;
 import br.com.carde.api.domain.model.Vehicle;
+import br.com.carde.api.domain.model.VehicleQrCode;
 import br.com.carde.api.presentation.dto.request.VehicleRequest;
+import br.com.carde.api.presentation.dto.response.VehicleQrCodeResponse;
 import br.com.carde.api.presentation.dto.response.VehicleResponse;
 import br.com.carde.api.presentation.mapper.VehicleResponseMapper;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,6 +30,8 @@ public class AdminVehicleController {
     private final CreateVehicleUseCase createVehicle;
     private final UpdateVehicleUseCase updateVehicle;
     private final DeleteVehicleUseCase deleteVehicle;
+    private final GenerateVehicleQrCodeUseCase generateQrCode;
+    private final GetVehicleQrCodeUseCase getVehicleQrCode;
     private final VehicleResponseMapper mapper;
 
     @GetMapping
@@ -63,5 +67,24 @@ public class AdminVehicleController {
     public ResponseEntity<Void> delete(@PathVariable String id) {
         deleteVehicle.execute(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{id}/qr-code")
+    @Operation(summary = "Gera QR Code para o veículo (idempotente — retorna existente se já gerado)")
+    public ResponseEntity<VehicleQrCodeResponse> generateQrCode(@PathVariable String id) {
+        VehicleQrCode qr = generateQrCode.execute(id);
+        return ResponseEntity.ok(toQrResponse(qr));
+    }
+
+    @GetMapping("/{id}/qr-code")
+    @Operation(summary = "Retorna QR Code do veículo (404 se ainda não gerado)")
+    public ResponseEntity<VehicleQrCodeResponse> getQrCode(@PathVariable String id) {
+        return getVehicleQrCode.execute(id)
+                .map(qr -> ResponseEntity.ok(toQrResponse(qr)))
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    private VehicleQrCodeResponse toQrResponse(VehicleQrCode qr) {
+        return new VehicleQrCodeResponse(qr.id(), qr.vehicleId(), qr.qrValue(), qr.imageUrl());
     }
 }

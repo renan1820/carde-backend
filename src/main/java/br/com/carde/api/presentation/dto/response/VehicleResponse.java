@@ -13,5 +13,6 @@ public record VehicleResponse(
         String fullHistory,
         List<String> imageUrls,
         String engineSoundUrl,
-        Map<String, String> specs
+        Map<String, String> specs,
+        String qrCodeImageUrl
 ) {}

@@ -43,6 +43,12 @@ springdoc:
 carde:
   cdn:
     base-url: ${CDN_BASE_URL:http://localhost:8080}
+  app:
+    base-url: ${APP_BASE_URL:https://carde.app}
+  qr:
+    api-url: ${QR_API_URL:https://api.qrserver.com/v1/create-qr-code}
+    size: ${QR_SIZE:300x300}
+    format: ${QR_FORMAT:png}
 
 jwt:
   secret: ${JWT_SECRET:dev-secret-key-min-32-chars-long-for-local-only}
