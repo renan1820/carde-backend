@@ -72,7 +72,7 @@ public class SecurityConfig {
                 "https://carde-admin*.vercel.app",  // cobre produção e previews
                 "http://localhost:5173"
         ));
-        adminConfig.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        adminConfig.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         adminConfig.setAllowedHeaders(List.of("Content-Type", "Accept", "Accept-Language", "Authorization"));
         adminConfig.setMaxAge(3600L);
 
