@@ -5,6 +5,7 @@ import br.com.carde.api.infrastructure.persistence.entity.VehicleEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.Optional;
 
@@ -16,4 +17,7 @@ public interface VehicleJpaRepository extends JpaRepository<VehicleEntity, Strin
             VehicleCategory category, Pageable pageable);
 
     Optional<VehicleEntity> findByIdAndActiveTrue(String id);
+
+    @Query("SELECT MAX(v.displayOrder) FROM VehicleEntity v WHERE v.active = true")
+    Optional<Integer> findMaxDisplayOrder();
 }

@@ -52,6 +52,7 @@ public class VehicleRepositoryAdapter implements VehicleRepository {
                 existing.getImageUrls().addAll(vehicle.imageUrls());
             }
             existing.setEngineSoundUrl(vehicle.engineSoundUrl());
+            existing.setDisplayOrder(vehicle.displayOrder());
             existing.getSpecs().clear();
             mapper.addSpecs(existing, vehicle.specs());
             return mapper.toDomain(jpaRepository.save(existing));
@@ -66,5 +67,10 @@ public class VehicleRepositoryAdapter implements VehicleRepository {
     @Override
     public boolean existsById(String id) {
         return jpaRepository.existsById(id);
+    }
+
+    @Override
+    public Optional<Integer> findMaxDisplayOrder() {
+        return jpaRepository.findMaxDisplayOrder();
     }
 }

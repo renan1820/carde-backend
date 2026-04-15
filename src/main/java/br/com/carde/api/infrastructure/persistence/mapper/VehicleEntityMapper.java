@@ -32,7 +32,8 @@ public class VehicleEntityMapper {
                 entity.getFullHistory(),
                 imageUrls,
                 entity.getEngineSoundUrl(),
-                specs
+                specs,
+                entity.getDisplayOrder()
         );
     }
 
@@ -49,6 +50,7 @@ public class VehicleEntityMapper {
             entity.getImageUrls().addAll(vehicle.imageUrls());
         }
         entity.setEngineSoundUrl(vehicle.engineSoundUrl());
+        entity.setDisplayOrder(vehicle.displayOrder());
         entity.setActive(true);
         addSpecs(entity, vehicle.specs());
         return entity;

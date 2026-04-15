@@ -20,13 +20,13 @@ public class EventRepositoryAdapter implements EventRepository {
 
     @Override
     public Page<MuseumEvent> findAll(Pageable pageable) {
-        return jpaRepository.findByActiveTrueOrderByEventDateAsc(pageable)
+        return jpaRepository.findByActiveTrueOrderByDisplayOrderAsc(pageable)
                 .map(mapper::toDomain);
     }
 
     @Override
     public Page<MuseumEvent> findFeatured(Pageable pageable) {
-        return jpaRepository.findByFeaturedTrueAndActiveTrueOrderByEventDateAsc(pageable)
+        return jpaRepository.findByFeaturedTrueAndActiveTrueOrderByDisplayOrderAsc(pageable)
                 .map(mapper::toDomain);
     }
 
@@ -44,6 +44,7 @@ public class EventRepositoryAdapter implements EventRepository {
             existing.setImageUrl(event.imageUrl());
             existing.setFeatured(event.featured());
             existing.setExternalLink(event.externalLink());
+            existing.setDisplayOrder(event.displayOrder());
             return mapper.toDomain(jpaRepository.save(existing));
         }).orElseGet(() -> mapper.toDomain(jpaRepository.save(mapper.toEntity(event))));
     }
@@ -56,5 +57,10 @@ public class EventRepositoryAdapter implements EventRepository {
     @Override
     public boolean existsById(String id) {
         return jpaRepository.existsById(id);
+    }
+
+    @Override
+    public Optional<Integer> findMaxDisplayOrder() {
+        return jpaRepository.findMaxDisplayOrder();
     }
 }

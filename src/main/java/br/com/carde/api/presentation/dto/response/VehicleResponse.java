@@ -14,5 +14,6 @@ public record VehicleResponse(
         List<String> imageUrls,
         String engineSoundUrl,
         Map<String, String> specs,
-        String qrCodeImageUrl
+        String qrCodeImageUrl,
+        int displayOrder
 ) {}

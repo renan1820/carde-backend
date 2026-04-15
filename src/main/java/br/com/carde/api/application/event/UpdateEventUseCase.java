@@ -18,9 +18,8 @@ public class UpdateEventUseCase {
     @CacheEvict(cacheNames = "events", allEntries = true)
     @Transactional
     public MuseumEvent execute(String id, EventRequest request) {
-        if (!repository.existsById(id)) {
-            throw new ResourceNotFoundException("Event", id);
-        }
+        MuseumEvent existing = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Event", id));
         MuseumEvent updated = new MuseumEvent(
                 id,
                 request.title(),
@@ -28,7 +27,8 @@ public class UpdateEventUseCase {
                 request.date(),
                 request.imageUrl(),
                 request.featured(),
-                request.externalLink()
+                request.externalLink(),
+                existing.displayOrder()
         );
         return repository.save(updated);
     }

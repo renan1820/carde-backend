@@ -51,7 +51,8 @@ public class VehicleResponseMapper {
                 resolvedUrls,
                 appConfig.cdn().resolve(vehicle.engineSoundUrl()),
                 vehicle.specs(),
-                qrCodeImageUrl
+                qrCodeImageUrl,
+                vehicle.displayOrder()
         );
     }
 }

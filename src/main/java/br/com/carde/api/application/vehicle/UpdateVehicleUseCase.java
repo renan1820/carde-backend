@@ -25,9 +25,8 @@ public class UpdateVehicleUseCase {
     })
     @Transactional
     public Vehicle execute(String id, VehicleRequest request) {
-        if (!repository.existsById(id)) {
-            throw new ResourceNotFoundException("Vehicle", id);
-        }
+        Vehicle existing = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Vehicle", id));
         Map<String, String> specs = new LinkedHashMap<>();
         if (request.specs() != null) {
             request.specs().stream()
@@ -44,7 +43,8 @@ public class UpdateVehicleUseCase {
                 request.fullHistory(),
                 request.imageUrls(),
                 request.engineSoundUrl(),
-                specs
+                specs,
+                existing.displayOrder()
         );
         return repository.save(updated);
     }

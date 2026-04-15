@@ -9,5 +9,6 @@ public record EventResponse(
         OffsetDateTime date,
         String imageUrl,
         boolean isFeatured,
-        String externalLink
+        String externalLink,
+        int displayOrder
 ) {}

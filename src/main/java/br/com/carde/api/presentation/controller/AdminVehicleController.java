@@ -3,6 +3,7 @@ package br.com.carde.api.presentation.controller;
 import br.com.carde.api.application.vehicle.*;
 import br.com.carde.api.domain.model.Vehicle;
 import br.com.carde.api.domain.model.VehicleQrCode;
+import br.com.carde.api.presentation.dto.request.ReorderItemRequest;
 import br.com.carde.api.presentation.dto.request.VehicleRequest;
 import br.com.carde.api.presentation.dto.response.VehicleQrCodeResponse;
 import br.com.carde.api.presentation.dto.response.VehicleResponse;
@@ -30,6 +31,7 @@ public class AdminVehicleController {
     private final CreateVehicleUseCase createVehicle;
     private final UpdateVehicleUseCase updateVehicle;
     private final DeleteVehicleUseCase deleteVehicle;
+    private final ReorderVehiclesUseCase reorderVehicles;
     private final GenerateVehicleQrCodeUseCase generateQrCode;
     private final GetVehicleQrCodeUseCase getVehicleQrCode;
     private final VehicleResponseMapper mapper;
@@ -66,6 +68,13 @@ public class AdminVehicleController {
     @Operation(summary = "Remove veículo")
     public ResponseEntity<Void> delete(@PathVariable String id) {
         deleteVehicle.execute(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/reorder")
+    @Operation(summary = "Reordena veículos")
+    public ResponseEntity<Void> reorder(@Valid @RequestBody List<ReorderItemRequest> items) {
+        reorderVehicles.execute(items);
         return ResponseEntity.noContent().build();
     }
 

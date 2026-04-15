@@ -9,5 +9,6 @@ public record MuseumEvent(
         OffsetDateTime date,
         String imageUrl,
         boolean featured,
-        String externalLink
+        String externalLink,
+        int displayOrder
 ) {}

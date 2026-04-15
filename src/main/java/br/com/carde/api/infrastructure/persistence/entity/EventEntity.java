@@ -35,6 +35,9 @@ public class EventEntity {
     @Column(name = "external_link", length = 1000)
     private String externalLink;
 
+    @Column(name = "display_order", nullable = false)
+    private int displayOrder;
+
     @Column(name = "is_active", nullable = false)
     private boolean active = true;
 

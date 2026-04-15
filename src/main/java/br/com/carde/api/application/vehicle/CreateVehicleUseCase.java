@@ -23,6 +23,7 @@ public class CreateVehicleUseCase {
     public Vehicle execute(VehicleRequest request) {
         String id = UUID.randomUUID().toString();
         Map<String, String> specs = buildSpecs(request);
+        int nextOrder = repository.findMaxDisplayOrder().orElse(-1) + 1;
         Vehicle vehicle = new Vehicle(
                 id,
                 request.name(),
@@ -33,7 +34,8 @@ public class CreateVehicleUseCase {
                 request.fullHistory(),
                 request.imageUrls(),
                 request.engineSoundUrl(),
-                specs
+                specs,
+                nextOrder
         );
         return repository.save(vehicle);
     }

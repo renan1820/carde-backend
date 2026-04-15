@@ -20,7 +20,8 @@ public class EventResponseMapper {
                 event.date(),
                 appConfig.cdn().resolve(event.imageUrl()),
                 event.featured(),
-                event.externalLink()
+                event.externalLink(),
+                event.displayOrder()
         );
     }
 }

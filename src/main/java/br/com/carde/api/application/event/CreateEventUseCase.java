@@ -19,6 +19,7 @@ public class CreateEventUseCase {
     @CacheEvict(cacheNames = "events", allEntries = true)
     @Transactional
     public MuseumEvent execute(EventRequest request) {
+        int nextOrder = repository.findMaxDisplayOrder().orElse(-1) + 1;
         MuseumEvent event = new MuseumEvent(
                 UUID.randomUUID().toString(),
                 request.title(),
@@ -26,7 +27,8 @@ public class CreateEventUseCase {
                 request.date(),
                 request.imageUrl(),
                 request.featured(),
-                request.externalLink()
+                request.externalLink(),
+                nextOrder
         );
         return repository.save(event);
     }

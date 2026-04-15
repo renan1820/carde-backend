@@ -15,7 +15,8 @@ public class EventEntityMapper {
                 entity.getEventDate(),
                 entity.getImageUrl(),
                 entity.isFeatured(),
-                entity.getExternalLink()
+                entity.getExternalLink(),
+                entity.getDisplayOrder()
         );
     }
 
@@ -28,6 +29,7 @@ public class EventEntityMapper {
         entity.setImageUrl(event.imageUrl());
         entity.setFeatured(event.featured());
         entity.setExternalLink(event.externalLink());
+        entity.setDisplayOrder(event.displayOrder());
         entity.setActive(true);
         return entity;
     }

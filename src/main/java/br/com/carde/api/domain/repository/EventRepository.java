@@ -13,4 +13,5 @@ public interface EventRepository {
     MuseumEvent save(MuseumEvent event);
     void deleteById(String id);
     boolean existsById(String id);
+    Optional<Integer> findMaxDisplayOrder();
 }

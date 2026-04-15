@@ -13,7 +13,8 @@ public record Vehicle(
         String fullHistory,
         List<String> imageUrls,
         String engineSoundUrl,
-        Map<String, String> specs
+        Map<String, String> specs,
+        int displayOrder
 ) {
     public String primaryImageUrl() {
         return imageUrls == null || imageUrls.isEmpty() ? null : imageUrls.get(0);

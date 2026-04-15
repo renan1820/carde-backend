@@ -3,6 +3,7 @@ package br.com.carde.api.presentation.controller;
 import br.com.carde.api.application.event.*;
 import br.com.carde.api.domain.model.MuseumEvent;
 import br.com.carde.api.presentation.dto.request.EventRequest;
+import br.com.carde.api.presentation.dto.request.ReorderItemRequest;
 import br.com.carde.api.presentation.dto.response.EventResponse;
 import br.com.carde.api.presentation.mapper.EventResponseMapper;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,6 +29,7 @@ public class AdminEventController {
     private final CreateEventUseCase createEvent;
     private final UpdateEventUseCase updateEvent;
     private final DeleteEventUseCase deleteEvent;
+    private final ReorderEventsUseCase reorderEvents;
     private final EventResponseMapper mapper;
 
     @GetMapping
@@ -62,6 +64,13 @@ public class AdminEventController {
     @Operation(summary = "Remove evento")
     public ResponseEntity<Void> delete(@PathVariable String id) {
         deleteEvent.execute(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/reorder")
+    @Operation(summary = "Reordena eventos")
+    public ResponseEntity<Void> reorder(@Valid @RequestBody List<ReorderItemRequest> items) {
+        reorderEvents.execute(items);
         return ResponseEntity.noContent().build();
     }
 }

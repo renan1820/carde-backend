@@ -14,4 +14,5 @@ public interface VehicleRepository {
     Vehicle save(Vehicle vehicle);
     void deleteById(String id);
     boolean existsById(String id);
+    Optional<Integer> findMaxDisplayOrder();
 }
