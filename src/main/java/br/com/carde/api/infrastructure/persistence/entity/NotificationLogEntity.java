@@ -14,6 +14,7 @@ import java.util.UUID;
 public class NotificationLogEntity {
 
     @Id
+    @Column(columnDefinition = "uuid")
     private String id;
 
     @Column(nullable = false, length = 100)
