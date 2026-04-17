@@ -122,6 +122,13 @@
             <optional>true</optional>
         </dependency>
 
+        <!-- Google Auth Library (FCM HTTP v1 API — Service Account OAuth2) -->
+        <dependency>
+            <groupId>com.google.auth</groupId>
+            <artifactId>google-auth-library-oauth2-http</artifactId>
+            <version>1.23.0</version>
+        </dependency>
+
         <!-- Testes -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
