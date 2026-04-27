@@ -22,6 +22,12 @@ logging:
     org.hibernate.SQL: WARN
     br.com.carde: INFO
 
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+
 carde:
   cdn:
     base-url: ${CDN_BASE_URL}

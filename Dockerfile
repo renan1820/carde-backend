@@ -10,7 +10,10 @@ RUN addgroup -S carde && adduser -S carde -G carde
 USER carde
 WORKDIR /app
 COPY --from=builder /app/target/*.jar app.jar
-ENV JAVA_OPTS="-XX:+UseSerialGC -Xmx256m -Xms128m -XX:MaxMetaspaceSize=96m \
+ENV JAVA_OPTS="-XX:+UseSerialGC -Xmx160m -Xms64m \
+  -XX:MaxMetaspaceSize=160m \
+  -XX:ReservedCodeCacheSize=32m \
+  -XX:+TieredCompilation -XX:TieredStopAtLevel=1 \
   -Djava.security.egd=file:/dev/./urandom \
   -Dspring.profiles.active=prod"
 EXPOSE 8080
